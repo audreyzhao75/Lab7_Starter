@@ -31,14 +31,19 @@ export class Router {
    *                      as the page's hash as well in the URL)
    * @param {Function} pageFunc The function to run when the page is called
    */
-  addPage(page, pageFunc) {
-    /**
-     * TODO Part 1 - Step 2
-     * Just like in the constructor above, store the pageFunc variable inside this
-     * router instance using the 'this' keyword. Substitute 'home' for the variable
-     * page
-     */
-  }
+    addPage(page, data, pageFunc) {
+        /**
+         * TODO Part 1 - Step 2
+         * Just like in the constructor above, store the pageFunc variable inside this
+         * router instance using the 'this' keyword. Substitute 'home' for the variable
+         * page
+         */
+
+
+        this[page] = data;
+        // pageFunc;
+        // console.log(page + " addpage");
+    }
 
   /**
    * Changes the page visually to the page that has been passed in. statePopped
@@ -47,23 +52,57 @@ export class Router {
    * @param {Boolean} statePopped True if this function is being called from a
    *                              'popstate' event instead of a normal card click
    */
-  navigate(page, statePopped) {
-    console.log(`navigate() function called, requested page: ${page}`);
-    /**
-     * TODO - Part 1 - Step 4
-     * Now, we are going to call the functions that we stored earlier based on 
-     * what page is being requested. For this function:
-     * 
-     *  1. First, check to see if the function exists, if it doesn't log an error
-     *     and return out of the function. 'this' is a global variable, so you can 
-     *     check to see if it exists nearly the same way you assigned it
-     *  2. Create a variable called hash. If page == 'home' set hash to be an empty
-     *     string, if page is anything else set it to be the string '#' + page, e.g.
-     *     '#ghostCookies'
-     *  3. Next, if statePopped is false and window.location.hash does NOT match the
-     *     hash that you just made, use history.pushState() to add the current state
-     *     and URL + hash to history
-     *  4. Finally, call the stored function for the given page
-     */
-  }
+    navigate(page, statePopped) {
+        console.log(`navigate() function called, requested page: ${page}`);
+        /**
+         * TODO - Part 1 - Step 4
+         * Now, we are going to call the functions that we stored earlier based on 
+         * what page is being requested. For this function:
+         * 
+         *  1. First, check to see if the function exists, if it doesn't log an error
+         *     and return out of the function. 'this' is a global variable, so you can 
+         *     check to see if it exists nearly the same way you assigned it
+         *  2. Create a variable called hash. If page == 'home' set hash to be an empty
+         *     string, if page is anything else set it to be the string '#' + page, e.g.
+         *     '#ghostCookies'
+         *  3. Next, if statePopped is false and window.location.hash does NOT match the
+         *     hash that you just made, use history.pushState() to add the current state
+         *     and URL + hash to history
+         *  4. Finally, call the stored function for the given page
+         */
+
+        // 1
+        // if(typeof this[page] != "function") {
+        //     console.log("Error, no page function existing");
+        //     return;
+        // }
+
+        // 2
+        let hash;
+
+        if(page == 'home') {
+            hash = "";
+            document.querySelector('.section--recipe-cards').classList.add('shown');
+            document.querySelector('.section--recipe-expand').classList.remove('shown');
+            // console.log(window.location.hash);
+            // window.location.hash = hash;
+        }
+        else {
+            hash = "#" + page;
+            document.querySelector('.section--recipe-cards').classList.remove('shown');
+            document.querySelector('.section--recipe-expand').classList.add('shown');
+            document.querySelector('recipe-expand').data = this[page];
+            // window.location.hash = hash;
+        }
+
+        // 3
+        if(!statePopped && window.location.hash != hash) {
+            history.pushState(page, "", window.location.origin+"/"+ hash);
+        }
+
+        // 4
+        // now done inside the if else since my pagefunc wasn't working??
+        // this[page];
+        // console.log(page);
+    }
 }
